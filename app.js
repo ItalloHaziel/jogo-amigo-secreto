@@ -2,72 +2,42 @@
 let amigos = [];
 
 function adicionarAmigo() {
-    const input = document.getElementById("amigo");
-    const nome = input.value.trim();
+  let inputAmigo = document.getElementById("amigo");
+  let nomeAmigo = inputAmigo.value.trim(); // Removendo espaços extras
 
-    if (nome === "") {
-        alert("Por favor, digite um nome válido.");
-        return;
-    }
+  if (!nomeAmigo) {
+    alert("Digite o nome do amigo");
+    return;
+  }
 
-    if (amigos.includes(nome)) {
-        alert("Este nome já foi adicionado.");
-        return;
-    }
-
-    amigos.push(nome);
-    atualizarLista();
-    input.value = "";
+  amigos.push(nomeAmigo);
+  inputAmigo.value = "";
+  inputAmigo.focus();
+  atualizarLista();
 }
 
 function atualizarLista() {
-    const lista = document.getElementById("listaAmigos");
-    lista.innerHTML = "";
+  let listaAmigos = document.getElementById("listaAmigos");
+  listaAmigos.innerHTML = "";
 
-    amigos.forEach((amigo) => {
-        const item = document.createElement("li");
-        item.textContent = amigo;
-        lista.appendChild(item);
-    });
+  amigos.forEach((amigo) => {
+    let item = document.createElement("li");
+    item.textContent = amigo;
+    listaAmigos.appendChild(item);
+  });
 }
 
 function sortearAmigo() {
-    if (amigos.length < 2) {
-        alert("Adicione pelo menos 2 amigos para sortear.");
-        return;
-    }
+  if (amigos.length === 0) {
+    alert("Nenhum amigo adicionado");
+    return;
+  }
 
-    let sorteioValido = false;
-    let sorteados = [];
-    let resultado = [];
+  let sorteado = amigos[Math.floor(Math.random() * amigos.length)];
+  let resultado = document.getElementById("resultado");
+  resultado.innerHTML = `O amigo sorteado foi: ${sorteado}`;
 
-    while (!sorteioValido) {
-        sorteados = [...amigos];
-        sorteados.sort(() => Math.random() - 0.5);
-        sorteioValido = true;
-
-        for (let i = 0; i < amigos.length; i++) {
-            if (amigos[i] === sorteados[i]) {
-                sorteioValido = false;
-                break;
-            }
-        }
-    }
-
-    for (let i = 0; i < amigos.length; i++) {
-        resultado.push(`${amigos[i]} → ${sorteados[i]}`);
-    }
-
-    exibirResultado(resultado);
-}
-
-function exibirResultado(resultado) {
-    const lista = document.getElementById("resultado");
-    lista.innerHTML = "";
-
-    resultado.forEach((item) => {
-        const elemento = document.createElement("li");
-        elemento.textContent = item;
-        lista.appendChild(elemento);
-    });
+  // Limpando a lista e o array após o sorteio
+  amigos = [];
+  document.getElementById("listaAmigos").innerHTML = "";
 }
